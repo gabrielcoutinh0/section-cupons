@@ -1,0 +1,420 @@
+<div class="main">
+  {% if section.settings.remove_conffeti %}
+    <div class="confetti"></div>
+  {% endif %}
+  <section class="topo">
+    <div class="container">
+      <div class="group-text-and-image">
+        {% if section.settings.cupom_image %}
+          <img src="{{ section.settings.cupom_image | image_url: width: '485px' }}">
+        {% endif %}
+        <div class="group-text">
+          <h2 class="title">{{ section.settings.title }}</h2>
+          <p class="subtitle">{{ section.settings.subtitle }}</p>
+          <a href="{{ section.settings.link_button }}">
+            <span class="button">
+              {{ section.settings.text_button -}}
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="cupons">
+        {% for block in section.blocks %}
+          <div class="cupom">
+            <div class="cupom-top">
+              <p class="title-cupom">{{ block.settings.title_cupom }}</p>
+              <span class="discount">
+                {{- block.settings.qnt_discont -}}
+                <span>%</span>
+              </span>
+              <p class="subtitle-cupom">{{ block.settings.subtitle_cupom }}</p>
+            </div>
+            <div class="cupom-bottom">
+              <hr>
+              <div class="group-cupom" id="btn-{{block.id}}">
+                <span>USE:</span>
+                <span id="{{block.id}}">{{ block.settings.cupom }}</span>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById("btn- {{block.id}}").addEventListener('click', clipboardCopy);
+            async function clipboardCopy() {
+              let cupom = document.getElementById("{{block.id}}").innerHTML;
+              await navigator.clipboard.writeText(cupom);
+            }
+          </script>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+  {
+    "name": "CUPONS",
+    "tag": "section",
+    "max_blocks": 4,
+    "presets": [
+      {
+        "name": "CUPONS"
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "bg_image",
+        "label": "Imagem de fundo"
+      },
+      {
+        "type": "image_picker",
+        "id": "cupom_image",
+        "label": "Imagem Cupom"
+      },
+      {
+        "type": "checkbox",
+        "id": "remove_conffeti",
+        "label": "Confetes",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Título",
+        "default": "A gente sabe que você ama cupom!"
+      }, {
+        "type": "color",
+        "id": "color_title",
+        "label": "Cor do título",
+        "default": "#fff"
+      }, {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Subtítulo",
+        "default": "Por isso preparamos vários deles para você aproveitar nossas ofertas com ainda mais desconto."
+      }, {
+        "type": "color",
+        "id": "color_subtitle",
+        "label": "Cor do subtítulo",
+        "default": "#fff"
+      }, {
+        "type": "text",
+        "id": "text_button",
+        "label": "Texto do botão",
+        "default": "Vem cá!"
+      }, {
+        "type": "url",
+        "id": "link_button",
+        "label": "Link do botão"
+      }, {
+        "type": "color",
+        "id": "color_button",
+        "label": "Cor do botão",
+        "default": "#E71D35"
+      }, {
+        "type": "color",
+        "id": "color_text_button",
+        "label": "Cor do texto do botão",
+        "default": "#fff"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Cupom",
+        "type": "block",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title_cupom",
+            "label": "Título Cupom",
+            "default": "Cupom de até"
+          },
+          {
+            "type": "number",
+            "id": "qnt_discont",
+            "label": "Desconto",
+            "default": 5
+          },
+          {
+            "type": "text",
+            "id": "subtitle_cupom",
+            "label": "Subtítulo Cupom",
+            "default": "de desconto"
+          },
+          {
+            "type": "text",
+            "id": "cupom",
+            "label": "Cupom",
+            "default": "VCMERECE"
+          }, {
+            "type": "color",
+            "id": "color_cupom",
+            "label": "Cor da fonte do cupom",
+            "default": "#fff"
+          }, {
+            "type": "color",
+            "id": "color_top",
+            "label": "Cor fundo cima cupom",
+            "default": "#fff"
+          }, {
+            "type": "color",
+            "id": "color_bottom",
+            "label": "Cor fundo baixo cupom",
+            "default": "#E71D35"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{%- style -%}
+  .main {
+    position: relative;
+  }
+
+  .confetti {
+    display: block !important;
+    background-color: transparent;
+    background-image: url('https://cdn.shopify.com/s/files/1/0714/8804/5333/files/bg-cupom.png?v=1675502497&width=300'), url('https://cdn.shopify.com/s/files/1/0714/8804/5333/files/bg-cupom-v2.png?v=1675502497&width=300');
+    -webkit-animation: confetti 20s linear infinite;
+    -moz-animation: confetti 20s linear infinite;
+    -ms-animation: confetti 20s linear infinite;
+    animation: confetti 20s linear infinite;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin-top: 0;
+    pointer-events: none;
+    position: absolute;
+    max-height: 553px;
+    height: 100%;
+  }
+
+  @keyframes confetti {
+    from {
+      background-position: 0 0, 0 0, 0 0
+    }
+    to {
+      background-position: 500px 1000px, 400px 400px, 300px 300px
+    }
+  }
+  @-moz-keyframes confetti {
+    from {
+      background-position: 0 0, 0 0, 0 0
+    }
+    to {
+      background-position: 500px 1000px, 800px 800px, 300px 300px
+    }
+  }
+  @-webkit-keyframes confetti {
+    from {
+      background-position: 0 0, 0 0, 0 0
+    }
+    to {
+      background-position: 500px 1000px, 800px 800px, 300px 300px;
+    }
+  }
+  @-ms-keyframes confetti {
+    from {
+      background-position: 0 0, 0 0, 0 0
+    }
+    to {
+      background-position: 500px 1000px, 400px 400px, 300px 300px
+    }
+  }
+
+  .topo {
+    {% if section.settings.bg_image %}
+      background-image: url("{{ section.settings.bg_image | image_url: width: '300px' }}");
+    {% else %}
+      background-image: url("https://cdn.shopify.com/s/files/1/0714/8804/5333/files/bg-area.png?v=1675498130&width=300");
+    {% endif %}
+    background-repeat: repeat-x;
+    margin: 0;
+    background-size: 100%;
+  }
+
+  .container {
+    position: relative;
+    z-index: 10;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .group-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 570px;
+    width: 100%;
+  }
+
+  .group-text a {
+    text-decoration: none;
+  }
+
+  .group-text-and-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 30px;
+    align-items: center;
+    padding: 40px 0 48px;
+  }
+
+  .group-text-and-image img {
+    max-width: 480px;
+    width: 100%;
+    max-height: 230px;
+    height: 100%;
+  }
+
+  .title {
+    all: unset;
+    max-width: 455px;
+    text-transform: uppercase;
+    text-align: center;
+    color: {{ section.settings.color_title }}
+    ;
+    font-size: 52px;
+    line-height: 47px;
+    padding-bottom: 25px;
+  }
+
+  .subtitle {
+    all: unset;
+    color: {{ section.settings.color_subtitle }}
+    ;
+    text-align: center;
+    font-size: 28px;
+    line-height: 30px;
+    padding-bottom: 12px;
+  }
+
+  .button {
+    all: unset;
+    background-color: {{ section.settings.color_button }}
+    ;
+    text-transform: uppercase;
+    color: {{ section.settings.color_text_button }}
+    ;
+    padding: 9px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .button:after,
+  .button:before {
+    all: unset;
+  }
+
+  /* BLOCO CUPOM */
+  {% for block in section.blocks %}
+    .cupons {
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-content: center;
+      gap: 30px;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .cupom {
+      display: flex;
+      flex-direction: column;
+      background-color: {{ block.settings.color_top }}
+      ;
+      border-radius: 20px;
+      max-height: 300px;
+      height: 100%;
+    }
+
+    .cupom-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cupom-top .title-cupom,
+    .subtitle-cupom {
+      text-transform: uppercase;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .cupom-top .discount {
+      font-size: 125px;
+      font-weight: bold;
+      line-height: 0;
+      color: #E71D35;
+      padding: 12px 0;
+    }
+
+    .cupom-top .discount span {
+      font-size: 75px;
+      color: #E71D35;
+    }
+
+    .cupom-bottom hr {
+      all: unset;
+      display: block;
+      width: 100%;
+      background-image: linear-gradient(to right, #fff 80%, rgba(255, 255, 255, 0) 20%);
+      background-position: bottom;
+      background-size: 40px 3px;
+      background-repeat: repeat-x;
+      padding-top: 8px;
+    }
+
+    .cupom-bottom {
+      text-align: center;
+      background-color: {{ block.settings.color_bottom }}
+      ;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .group-cupom {
+      padding: 0 24px;
+      cursor: pointer;
+    }
+
+    .group-cupom span {
+      color: {{ block.settings.color_cupom }}
+      ;
+      text-transform: uppercase;
+      font-size: 32px;
+      font-weight: bold;
+    }
+  {% endfor %}
+
+  @media(min-width: 1350px) {
+    .cupons {
+      grid-template-columns: repeat({{section.blocks.size}}, 1fr);
+    }
+
+    .group-text-and-image {
+      flex-direction: row;
+    }
+
+    .topo {
+      background-size: initial;
+    }
+  }
+
+  @media(min-width: 768px) and (max-width: 1350px) {
+    .cupons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .topo {
+      background-size: 100%;
+    }
+  }
+{%- endstyle -%}
